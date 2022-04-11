@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript" src="./reactivity.js"></script>
+  <script type="text/javascript" src="./runtime-dom.js"></script>
+  <script type="text/javascript" src="./index.js"></script>
+  <!--1. 创建虚拟节点转化成真实节点-->
+  <!--2. 组件的实现 setup-->
+  <!--3. reactive API 实现 Effect-->
+  <!--4. diff算法-->
+  <div id="app"></div>
+  <script type="text/javascript">
+    let app = document.getElementById('app')
+    var state = window.reactive({
+      count: 0,
+      name: 'yang'
+    }) // 将数据包装成响应式
+  
+    const oldNode = {
+      tag: 'div',
+      props: {
+        style: {
+          color: 'white'
+        },
+        id: 'aaa'
+      },
+      children: [
+        {
+          tag: 'li',
+          props: {
+            style: {background: 'red'},
+            key: "A"
+          },
+          children: 'A'
+        },
+        {
+          tag: 'li',
+          props: {
+            style: {background: 'yellow'},
+            key: "B"
+          },
+          children: 'B'
+        },
+        {
+          tag: 'li',
+          props: {
+            style: {background: 'blue'},
+            key: "C"
+          },
+          children: 'C'
+        }
+      ]
+    }
+    window.render(oldNode, app)
+    setTimeout(() => {
+      const newNode = {
+        tag: 'div',
+        props: {
+          style: {
+            color: 'blue'
+          }
+        },
+        children: [
+          {
+            tag: 'li',
+            props: {
+              style: {background: 'pink'},
+              key: "D"
+            },
+            children: 'D'
+          },
+          {
+            tag: 'li',
+            props: {
+              style: {background: 'red'},
+              key: "A"
+            },
+            children: 'A'
+          },
+          {
+            tag: 'li',
+            props: {
+              style: {background: 'yellow'},
+              key: "B"
+            },
+            children: 'B'
+          },
+          {
+            tag: 'li',
+            props: {
+              style: {background: 'blue'},
+              key: "C"
+            },
+            children: 'C'
+          }
+        ]
+      }
+      window.render(newNode, app)
+    }, 2000)
+    // const MyComponent = {
+    //   setup(props, context) {
+    //     // 如果没有返回函数 会把template 编译为render返回
+    //     return () => {
+    //       // render 函数
+    //       return {
+    //         tag: 'div',
+    //         props: {style: {color: 'pink'}},
+    //         children: [
+    //           {
+    //             tag: 'p',
+    //             props: null,
+    //             children: '我是一个自定义组件' + state.name
+    //           },
+    //           {
+    //             tag: 'button',
+    //             props: {
+    //               onClick: ()=> {
+    //                 state.name = 'bo'
+    //               }
+    //             },
+    //             children: '子组件按钮'
+    //           }
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
+    // effect 其实就类似于 vue2 中的watcher
+    // window.effect(() => {
+    //   const vnode = {
+    //     tag: 'div',
+    //     props: {
+    //       style: {border: '1px solid yellow'}
+    //     },
+    //     children: [{
+    //       tag: 'p',
+    //       props: {
+    //         style: {color: 'blue'}
+    //       },
+    //       children: '文本展示字符串,计数器' + state.count
+    //     },
+    //     {
+    //       tag: 'button',
+    //       props: {
+    //         onClick: () => {
+    //           alert(state.count)
+    //         }
+    //       },
+    //       children: '点击我！'
+    //     }, {
+    //       tag: MyComponent, // 标签是组件
+    //       props: null, // 组件的属性
+    //       children: '' // 组件的插槽
+    //     }, {
+    //       tag: MyComponent, // 标签是组件
+    //       props: null, // 组件的属性
+    //       children: '' // 组件的插槽
+    //     }]
+    //   }
+    //   window.render(vnode, app); // 渲染操作
+    // })
+    
+  </script>
+</body>
+</html>

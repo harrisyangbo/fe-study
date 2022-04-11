@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript">
+    class MyPromise {
+      constructor(executor) {
+        this.value = null;
+        this.reason = null;
+        this.states = 'pending';
+        this.resolveCallbacks = [];
+        this.rejectCallbacks = [];
+        const resolve = (value) => {
+          if (this.states === 'pending') {
+            this.states = 'fufilled';
+            this.value = value;
+            this.resolveCallbacks.forEach(cb => cb(value))  
+          }
+        }
+        const reject = (reason) => {
+          if (this.states === 'pending') {
+            this.states = 'rejected'
+            this.reason = reason;
+            this.rejectCallbacks.forEach(cb => cb(reason))
+          }
+        }
+
+        try {
+          executor(resolve, reject)
+        } catch(e) {
+          reject(e);
+        }
+      }
+      resolvePromise(promise2, x, resolve, reject) {
+        if (promise2 === x) {
+          throw new Error('循环引用')
+        }
+        if (x && typeof x === 'object' || typeof x === 'function') {
+          let used;
+          try {
+            let then = x.then;
+            if (typeof then === 'function') {
+              then.call(x, (y) => {
+                if (used) return;
+                used = true;
+                resolvePromise(promise2, x, resolve, reject)
+              }, (r) => {
+                if (used) return;
+                used = true;
+                reject(r);
+              })
+            } else {
+              if (used) return;
+              used = true;
+              resolve(x);
+            }
+          } catch(e) {
+            if (used) return;
+            used = true;
+            reject(e)
+          }
+        } else {  
+          resolve(x);
+        }
+      }
+
+      then(onFufilled, onRejected) {
+        let promise2 = new MyPromise((resolve, reject) => {
+          if (this.states === 'pending') {
+            this.resolveCallbacks.push(() => {
+              try {
+                let x = onFufilled(this.value);;
+                this.resolvePromise(promise2, x, resolve, reject);
+              } catch(e) {
+                reject(e);
+              }
+            });
+            this.rejectCallbacks.push(() => {
+              try {
+                let x = onRejected(this.reason);
+                this.resolvePromise(promise2, x, resolve, reject);
+              } catch(e) {
+                reject(e);
+              }
+            });
+          }
+          if (this.states === 'fufilled') {
+            try {
+              let x = onFufilled(this.value);
+              this.resolvePromise(promise2, x, resolve, reject);
+            } catch(e) {
+              reject(e);
+            }
+          }
+          if (this.states === 'rejected') {
+            try {
+              let x = onRejected(this.reason);
+              this.resolvePromise(promise2, x, resolve, reject);
+            } catch(e) {
+              reject(e);
+            }
+          }
+        })
+        return promise2;
+      }
+
+      catch(onRejected) {
+        return this.then(null, onRejected);
+      }
+    }
+    let promise = new MyPromise(function(resolve, reject) {
+      setTimeout(() => {
+        resolve('1111')
+      }, 2000)
+    })
+    promise.then((res) => {
+      console.log('第一个then'+res)
+      return 4;
+    })
+    .then((res2) => {
+      console.log('第二个then' + res2);
+    }).catch((reason) => {
+      console.log('错误')
+      console.log(reason)
+    })
+  </script> 
+</body>
+</html>
