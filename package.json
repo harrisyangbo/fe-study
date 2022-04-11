@@ -1,0 +1,19 @@
+{
+  "name": "fe-study",
+  "version": "1.0.0",
+  "description": "前端知识点学习",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrisyangbo/fe-study.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harrisyangbo/fe-study/issues"
+  },
+  "homepage": "https://github.com/harrisyangbo/fe-study#readme"
+}
