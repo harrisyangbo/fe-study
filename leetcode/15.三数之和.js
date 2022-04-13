@@ -35,7 +35,51 @@
  * @return {number[][]}
  */
 var threeSum = function(nums) {
-    
+	let res = [];
+	let hash = {};
+	for (let i = 0; i < nums.length; i++) {
+		if (i>=1 && nums[i] === nums[i - 1]) continue;
+		for (let j = i + 1; j < nums.length; j++) {
+			if (hash[nums[j]] !== undefined) {
+				res.push([nums[j]].concat(hash[nums[j]]));
+				hash[nums[j]] = undefined
+			} else {
+				const mark = 0 - nums[i] - nums[j];
+				hash[mark] = [nums[i], nums[j]]
+			}
+		}
+	}
+	return res;
+};
+var threeSum = function(nums) {
+	nums.sort();
+	let result = [];
+	let r = nums.length - 1;
+	let l = 0
+	for (let i = 0; i < nums.length; i++) {
+		if (nums[i] > 0) break;
+		if (i > 0 && nums[i] === nums[i - 1]) continue; // 去重
+		l = i + 1;
+		while (l < r) {
+			if (nums[i] + nums[l] + nums[r] < 0) {
+				l++
+			} else if (nums[i] + nums[l] + nums[r] > 0) {
+				r--
+			} else {
+				result.push([nums[i], nums[l], nums[r]]);
+				// 去重
+				while(l < r && nums[l] === nums[l+1]) {
+					l++
+				}
+				// 去重
+				while(l < r && nums[r] === nums[r-1]) {
+					r--
+				}
+				l++;
+				r--;
+			}
+		}
+	}
 };
 // @lc code=end
 

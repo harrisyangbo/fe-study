@@ -21,3 +21,20 @@ KthLargest.prototype.add = function(val) {
  * var obj = new KthLargest(k, nums)
  * var param_1 = obj.add(val)
  */
+
+ var isAnagram = function(s, t) {
+	if (s.length !== t.length) return false;
+	let map = new Array(26).fill(0);
+	let base = 'a'.codePointAt(0);
+	for (let str of s) {
+		map[str.codePointAt() - base] += 1
+	}
+	for (let str of t) {
+		map[str.codePointAt() - base] -= 1
+		if (map[str.codePointAt() - base] < 0) {
+			return false
+		}
+	}
+	return true
+};
+isAnagram("rat","car")
