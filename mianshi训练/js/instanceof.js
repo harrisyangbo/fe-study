@@ -14,7 +14,7 @@ function myInstanceof(obj, ctor) {
 
 function intanceof(left, right) {
   const proto = left.__proto__;
-  while(proto) {
+  while (proto) {
     if (proto === right.prototype) {
       return true
     }

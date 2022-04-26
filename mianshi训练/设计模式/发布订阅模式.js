@@ -3,7 +3,6 @@
  * 都会收到通知。
  * 
 */
-
 var event = {
   clientList: {}, // 缓存列表，存放订阅者的回调函数
   listen: function(key, fn) {
@@ -28,7 +27,6 @@ var event = {
     }
   }
 }
-
 var installEvent = function(obj) {
   for(var i in event) {
     obj[i] = event[i];

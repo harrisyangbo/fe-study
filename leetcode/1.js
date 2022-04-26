@@ -26,7 +26,6 @@ var twoSum1 = function(nums, target) {
 		hash[nums[i]] = i;
 	}
 };
-
 //[2,7,11,15]
 
 console.log(twoSum1([2,7,11,15], 9))

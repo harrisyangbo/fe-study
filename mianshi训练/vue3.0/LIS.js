@@ -16,7 +16,6 @@
  * 再拿3比，找到第一个比3大的，然后替换掉 [2,3,7]
  * 如果遇到1 需要插入到第0个，需要忽略掉，就不去替换了
 */
-
 function getSequence(arr) {
   const result = [0]; // 默认以0作为开头, result 里存的是索引
   let p = arr.slice(); // 拷贝一个一摸一样的数组

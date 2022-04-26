@@ -19,6 +19,26 @@ function throttle(fn, delay) {
   }
 }
 
+function throttle(fn, delay) {
+  let lastTime = 0;
+  return function() {
+    const now = new Date().getTime()
+    if (nowTime - lastTime > delay) {
+      fn.call(this)
+      lastTime = nowTime
+    }
+  }
+}
+function debounce(fn, delay) {
+  let timer = null;
+  return function() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this)
+    }, delay)
+  }
+}
+
 /**
  * 防抖函数：一个需要频繁触发的函数，在规定时间内，只让最后一次生效，前面的不生效。
  * 
